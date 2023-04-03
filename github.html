@@ -92,8 +92,8 @@
 
     .tips > p:first-child::before {
         position: absolute;
-        left: -3em;
-        content: 'PS：';
+        left: -5.5em;
+        content: '使用说明：';
         color: #7b7b7b
     }
 
@@ -109,9 +109,37 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <script>
+        baseURL = "github.covear.xyz"
         function toSubmit(e) {
-            e.preventDefault()
+            e.preventDefault();
+            console.log('toSubmit');
             window.open(location.href.substr(0, location.href.lastIndexOf('/') + 1) + document.getElementsByName('q')[0].value);
+            return false
+        }
+        function toVisit(e) {
+            e.preventDefault();
+            console.log('toVisit');
+            url = document.getElementsByName('visit')[0].value;
+            if ( url.includes("github.com") ) {
+                url = url.replace("github.com", baseURL);
+            }
+            else {
+                url = "https://" + baseURL + "/" + url;
+            }
+            if ( !url.includes("http") ) {
+                url = "https://" + url;
+            }
+            if ( url.includes("http:") ) {
+                url = url.replace("http:", "https:");
+            }
+            console.log(url);
+            window.open(url);
+            return false
+        }
+        function toSearch(e) {
+            e.preventDefault();
+            console.log('toSearch');
+            window.open("https://" + baseURL + "/search?q=" + document.getElementsByName('search')[0].value);
             return false
         }
     </script>
@@ -126,18 +154,46 @@
         <div class="bar"></div>
     </label>
     <input class="block btn" type="submit" value="下载">
-    <div class="tips"><p>GitHub文件链接带不带协议头都可以，支持release、archive以及文件，右键复制出来的链接都是符合标准的，更多用法、clone加速请参考<a href="https://hunsh.net/archives/23/">这篇文章</a>。</p>
-        <p>release、archive使用cf加速，文件会跳转至JsDelivr</p>
-        <p>注意，不支持项目文件夹</p></div>
-    <div class="example">
-        <p>分支源码：https://github.com/hunshcn/project/archive/master.zip</p>
-        <p>release源码：https://github.com/hunshcn/project/archive/v0.1.0.tar.gz</p>
-        <p>release文件：https://github.com/hunshcn/project/releases/download/v0.1.0/example.zip</p>
-        <p>分支文件：https://github.com/hunshcn/project/blob/master/filename</p>
-    </div>
 </form>
-<p style="position: sticky;top: calc(100% - 2.5em);">项目基于<a href="https://dash.cloudflare.com/" target="_blank">Cloudflare</a> Workers，开源于<a style="color: #3294ea"
-                                                                                         href="https://github.com/hunshcn/gh-proxy" target="_blank">GitHub</a>、<a style="color: #3294ea"
+<form action="./" method="get" style="padding-bottom: 40px" target="_blank" class="flex" onsubmit="toVisit(event)">
+    <label class="block" style="width: fit-content">
+        <input class="block url" name="visit" type="text" placeholder="键入Github仓库地址或用户名"
+               pattern="^(((https|http):\/\/)|(github\.com\/))?.+$" required>
+        <div class="bar"></div>
+    </label>
+    <input class="block btn" type="submit" value="访问">
+</form>
+<form action="./" method="get" style="padding-bottom: 40px" target="_blank" class="flex" onsubmit="toSearch(event)">
+    <label class="block" style="width: fit-content">
+        <input class="block url" name="search" type="text" placeholder="键入要在Github搜索的内容" required>
+        <div class="bar"></div>
+    </label>
+    <input class="block btn" type="submit" value="搜索">
+</form>
+<div style="padding-bottom: 40px" target="_blank" class="flex">
+    <div class="tips">
+        <p>GitHub文件链接带不带协议头都可以，支持release、archive以及文件。</p>
+        <p>右键复制出来的链接都是符合标准的，直接在copy出来的url前加https://git.covear.xyz/即可。</p>
+        <p>访问私有仓库可以通过：git clone https://user:[email protected]/https://github.com/xxxx/xxxx</p>
+        <p>更多用法、clone加速请参考<a href="https://hunsh.net/archives/23/">这篇文章</a>。</p>
+        <p>release、archive使用cf加速，文件会跳转至JsDelivr</p>
+        <p>注意，不支持项目文件夹</p>
+    </div>
+    <div class="example">
+        <p><b>下载</b> 分支源码：https://github.com/DavidDengHui/project/archive/master.zip</p>
+        <p><b>下载</b> release源码：https://github.com/DavidDengHui/project/archive/v0.1.0.tar.gz</p>
+        <p><b>下载</b> release文件：https://github.com/DavidDengHui/project/releases/download/v0.1.0/example.zip</p>
+        <p><b>下载</b> 分支文件：https://github.com/DavidDengHui/project/blob/master/filename</p>
+        <p><b>下载</b> commit文件：https://github.com/DavidDengHui/project/blob/abcd/filename</p>
+        <p><b>下载</b> gist：https://gist.githubusercontent.com/cielpy/abcd/raw/cmd.py</p>
+        <p><b>访问</b> 仓库地址：https://github.com/DavidDengHui/my</p>
+        <p><b>访问</b> 用户首页：DavidDengHui</p>
+        <p><b>搜索</b> 仓库名称：WordPress</p>
+    </div>
+
+</div>
+<p style="position: sticky;top: calc(100% - 2.5em);">项目基于<a href="https://dash.cloudflare.com/" target="_blank">Cloudflare Workers</a>，开源于<a style="color: #3294ea"
+                                                                                         href="https://github.com/DavidDengHui/gh-proxy" target="_blank">GitHub</a>、<a style="color: #3294ea"
                                                                                          href="https://gitee.com/osforge/github" target="_blank">Gitee</a>
 </p>
 </body>
